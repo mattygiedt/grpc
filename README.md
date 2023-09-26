@@ -76,18 +76,24 @@ root@398d7148e5b2:/workspaces/grpc# java -jar src/java/target/grpc-java-0.0.1-SN
 The Java source demonstrates three types of client (blocking, asynchronous, listenable_future).
 Once the server is started, choose one client type and run it!
 ```
-root@398d7148e5b2:/workspaces/grpc# java -jar src/java/target/grpc-java-0.0.1-SNAPSHOT-shaded.jar ASYNC_CLIENT 50051
-16:17:56.120 [main] INFO com.mattygiedt.grpc.ServiceEntry -- Starting 'ASYNC_CLIENT' service on port: 50051
-16:17:56.348 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.isPendingResponse... (32)
-16:17:56.448 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.isPendingResponse... (32)
-16:17:56.549 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.isPendingResponse... (32)
-16:17:56.623 [grpc-default-executor-1] INFO com.mattygiedt.grpc.AsyncClient -- sayManyHellos JavaFlatbuffers -> Hello, JavaFlatbuffers [4]
-16:17:56.624 [grpc-default-executor-1] INFO com.mattygiedt.grpc.AsyncClient -- sayManyHellos JavaFlatbuffers -> Hello, JavaFlatbuffers [2]
-16:17:56.625 [grpc-default-executor-2] INFO com.mattygiedt.grpc.AsyncClient -- sayHello JavaFlatbuffer -> Hello, JavaFlatbuffer [1]
-16:17:56.625 [grpc-default-executor-1] INFO com.mattygiedt.grpc.AsyncClient -- sayHello JavaFlatbuffer -> Hello, JavaFlatbuffer [3]
-...
-16:17:56.637 [grpc-default-executor-2] INFO com.mattygiedt.grpc.AsyncClient -- sayManyHellos JavaFlatbuffers -> Hello, JavaFlatbuffers [30]
-16:17:56.637 [grpc-default-executor-2] INFO com.mattygiedt.grpc.AsyncClient -- sayManyHellos JavaFlatbuffers -> Hello, JavaFlatbuffers [31]
-16:17:56.638 [grpc-default-executor-2] INFO com.mattygiedt.grpc.AsyncClient -- sayManyHellos JavaFlatbuffers -> Hello, JavaFlatbuffers [32]
-16:17:56.649 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.sayHello done...
+root@398d7148e5b2:/workspaces/grpc# java -jar src/java/target/grpc-java-0.0.1-SNAPSHOT-shaded.jar ASYNC_CLIENT 50051 | grep main
+17:17:05.917 [main] INFO com.mattygiedt.grpc.ServiceEntry -- Starting 'ASYNC_CLIENT' service on port: 50051
+17:17:06.140 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.181 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (8)
+17:17:06.262 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (12)
+17:17:06.386 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.429 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.472 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.515 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.557 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.601 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.643 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.686 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.730 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.773 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.817 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.859 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.902 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.pendingResponseCount: (4)
+17:17:06.942 [main] INFO com.mattygiedt.grpc.ServiceEntry -- client.sayHello done...
+root@398d7148e5b2:/workspaces/grpc# 
 ```
