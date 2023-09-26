@@ -31,7 +31,7 @@ public class Server extends GreeterGrpc.GreeterImplBase {
 
         server = ServerBuilder.forPort(port)
                  .addService(this)
-                 .executor(Executors.newFixedThreadPool(1))
+                 .executor(Executors.newFixedThreadPool(4))
                  .build();
 
         server.start();
@@ -50,6 +50,7 @@ public class Server extends GreeterGrpc.GreeterImplBase {
     @Override
     public void sayHello(final HelloRequest request,
                          final StreamObserver<HelloReply> responseObserver) {
+        logger.info("sayHello: {}", request.name());
         final HelloReply reply = createHelloReply(request.name());
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
@@ -58,6 +59,8 @@ public class Server extends GreeterGrpc.GreeterImplBase {
     @Override
     public void sayManyHellos(final ManyHellosRequest request,
                               final StreamObserver<HelloReply> responseObserver) {
+        logger.info("sayManyHellos: {} ({})", request.name(), request.numGreetings());
+
         for(int i=0; i<request.numGreetings(); i++) {
             responseObserver.onNext(createHelloReply(request.name()));
         }
@@ -73,7 +76,7 @@ public class Server extends GreeterGrpc.GreeterImplBase {
             sb.append("Hello, ")
               .append(name)
               .append(" [")
-              .append(counter.addAndGet(1))
+              .append(counter.incrementAndGet())
               .append("]")
               .toString());
 

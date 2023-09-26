@@ -16,7 +16,7 @@ class GreeterServiceImpl final : public Greeter::Service {
                 const flatbuffers::grpc::Message<HelloRequest>* request_msg,
                 flatbuffers::grpc::Message<HelloReply>* response_msg)
       -> grpc::Status override {
-    flatbuffers::grpc::MessageBuilder mb_;
+    flatbuffers::grpc::MessageBuilder msg_builder;
 
     // We call GetRoot to "parse" the message. Verification is already
     // performed by default. See the notes below for more details.
@@ -28,14 +28,14 @@ class GreeterServiceImpl final : public Greeter::Service {
     // 'flatbuffers::grpc::MessageBuilder' is a 'FlatBufferBuilder' with a
     // special allocator for efficient gRPC buffer transfer, but otherwise
     // usage is the same as usual.
-    auto msg_offset = mb_.CreateString("Hello, " + name);
-    auto hello_offset = CreateHelloReply(mb_, msg_offset);
-    mb_.Finish(hello_offset);
+    auto msg_offset = msg_builder.CreateString("Hello, " + name);
+    auto hello_offset = CreateHelloReply(msg_builder, msg_offset);
+    msg_builder.Finish(hello_offset);
 
     // The 'ReleaseMessage<T>()' function detaches the message from the
     // builder, so we can transfer the resopnse to gRPC while simultaneously
     // detaching that memory buffer from the builer.
-    *response_msg = mb_.ReleaseMessage<HelloReply>();
+    *response_msg = msg_builder.ReleaseMessage<HelloReply>();
 
     // Return an OK status.
     return grpc::Status::OK;
@@ -46,6 +46,8 @@ class GreeterServiceImpl final : public Greeter::Service {
       const flatbuffers::grpc::Message<ManyHellosRequest>* request_msg,
       grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>>* writer)
       -> grpc::Status override {
+    flatbuffers::grpc::MessageBuilder msg_builder;
+
     // The streaming usage below is simply a combination of standard gRPC
     // streaming with the FlatBuffers usage shown above.
     const ManyHellosRequest* request = request_msg->GetRoot();
@@ -53,17 +55,16 @@ class GreeterServiceImpl final : public Greeter::Service {
     int num_greetings = request->num_greetings();
 
     for (int i = 0; i < num_greetings; i++) {
-      auto msg_offset = mb_.CreateString("Many hellos, " + name);
-      auto hello_offset = CreateHelloReply(mb_, msg_offset);
-      mb_.Finish(hello_offset);
-      writer->Write(mb_.ReleaseMessage<HelloReply>());
+      auto msg_offset = msg_builder.CreateString("Many hellos, " + name);
+      auto hello_offset = CreateHelloReply(msg_builder, msg_offset);
+      msg_builder.Finish(hello_offset);
+      writer->Write(msg_builder.ReleaseMessage<HelloReply>());
     }
 
     return grpc::Status::OK;
   }
 
  private:
-  flatbuffers::grpc::MessageBuilder mb_;
 };
 
 void RunServer(const std::string& server_address) {
