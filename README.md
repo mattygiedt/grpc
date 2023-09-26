@@ -61,7 +61,10 @@ root@:/workspaces/grpc/build# ./src/cpp/async_client localhost:50051
 [2022-09-06 23:25:21.037] [info] SayHelloAsync request: World, response: Hello, World
 ```
 
-## Last thoughts
-I fully recognize that this is just a small drop in the gRPC ocean. There is a lot more to learn within gRPC. For instance, I'd like to spend some more time on the [streaming](https://ably.com/blog/grpc-stream-performance) capabilities. Which feels odd -- why would I want an RPC framework providing me PUB / SUB?
+## Let's add Java to the mix!
+```
+root@398d7148e5b2:/workspaces/grpc# mvn clean package
+root@398d7148e5b2:/workspaces/grpc# java -jar src/java/target/grpc-java-0.0.1-SNAPSHOT-shaded.jar CLIENT 50051
+root@398d7148e5b2:/workspaces/grpc# java -jar src/java/target/grpc-java-0.0.1-SNAPSHOT-shaded.jar SERVER 50051
+```
 
-Anyway, I continue to be a big fan of flatbuffers and now have at least of modicum of experience with gRPC!
