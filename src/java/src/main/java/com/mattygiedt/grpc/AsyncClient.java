@@ -40,13 +40,17 @@ public class AsyncClient extends BaseClient {
     public void sayManyHellos(final String message, final int greetingCount) {
         final ManyHellosRequest request = RequestFactory.createManyHellosRequest(message, greetingCount);
 
+        //
+        //  Create a new StreamingCallback
+        //
+
         stub.sayManyHellos(request, new StreamingCallback<HelloReply>(
             (response) -> {
                 logger.info("sayManyHellos {} -> {}", message, response.message());
-                addResponse();
-            }
+            },
+            () -> addResponse()
         ));
 
-        addRequests(greetingCount);
+        addRequest();
     }
 }

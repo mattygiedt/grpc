@@ -18,16 +18,25 @@ public final class ServiceEntry {
                 client.sayManyHellos("JavaFlatbuffers", 10);
             }
 
-            client.sayHello("JavaFlatbufferAgain");
+            client.sayHello("ItsJavaFlatbufferAgain");
 
             if(client instanceof ListenableFutureClient == false) {
                 client.sayManyHellos("JavaFlatbuffers", 20);
             }
 
-            while(client.isPendingResponse()) {
-                logger.info("client.isPendingResponse... ({})", client.pendingResponseCount());
-                Thread.sleep(100);
-            }
+            final int pendingResponses = client.pendingResponseCount();
+            logger.info("client.pendingResponseCount: ({})", pendingResponses);
+
+            //
+            //  Introduce some throttling...
+            //
+
+            Thread.sleep(pendingResponses * 10);
+        }
+
+        while(client.isPendingResponse()) {
+            logger.info("client.isPendingResponse... ({})", client.pendingResponseCount());
+            Thread.sleep(100);
         }
 
         logger.info("client.sayHello done...");

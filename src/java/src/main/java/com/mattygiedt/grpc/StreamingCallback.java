@@ -13,11 +13,18 @@ import org.slf4j.LoggerFactory;
 public class StreamingCallback<T> implements StreamObserver<T> {
     private static final Logger logger = LoggerFactory.getLogger(StreamingCallback.class);
 
-    private final Consumer<T> handler;
+    private final Consumer<T> callbackHandler;
+    private final Runnable completionHandler;
     private final AtomicBoolean completed = new AtomicBoolean(false);
 
-    public StreamingCallback(final Consumer<T> handler) {
-        this.handler = handler;
+    public StreamingCallback(final Consumer<T> callbackHandler) {
+        this(callbackHandler, () -> {});
+    }
+
+    public StreamingCallback(final Consumer<T> callbackHandler,
+                             final Runnable completionHandler) {
+        this.callbackHandler = callbackHandler;
+        this.completionHandler = completionHandler;
     }
 
     public boolean isCompleted() {
@@ -26,12 +33,12 @@ public class StreamingCallback<T> implements StreamObserver<T> {
 
     @Override
     public void onNext(final T response) {
-        handler.accept(response);
+        callbackHandler.accept(response);
     }
 
     @Override
     public void onCompleted() {
-
+        completionHandler.run();
         completed.set(true);
     }
 
